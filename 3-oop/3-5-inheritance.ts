@@ -1,23 +1,17 @@
 {
   type ACupOfCoffee = {
     shots: number;
-    hasMilk: false;
+    hasMilk: boolean;
   };
 
   interface CoffeeMaker {
     makeCoffee(shots: number): ACupOfCoffee;
   }
 
-  interface CommercialCoffeeMaker {
-    makeCoffee(shots: number): ACupOfCoffee;
-    fillCoffeeBeans(beans: number): void;
-    clean(): void;
-  }
-
-  class CoffeeMachine implements CoffeeMaker, CommercialCoffeeMaker {
+  class CoffeeMachine implements CoffeeMaker {
     private static BEANS_GRAMM_PER_SHOT = 7; // class level
     private coffeeBeans: number = 0; // instance (object) level
-    private constructor(coffeeBeans: number) {
+    constructor(coffeeBeans: number) {
       this.coffeeBeans = coffeeBeans;
     }
     static makeMachine(coffeeBeans: number): CoffeeMachine {
@@ -59,27 +53,26 @@
     }
   }
 
-  class AmateurUser {
-    constructor(private machine: CoffeeMaker) {}
-    makeCoffee() {
-      const coffee = this.machine.makeCoffee(2);
-      console.log(coffee);
+  class LatteMachine extends CoffeeMachine {
+    constructor(beans: number, public readonly serialNumber: string) {
+      super(beans);
+    }
+    private steamMilk(): void {
+      console.log("Steaming some milk... 🥛");
+    }
+    makeCoffee(shots: number): ACupOfCoffee {
+      const coffee = super.makeCoffee(shots);
+      this.steamMilk();
+      return {
+        ...coffee,
+        hasMilk: true,
+      };
     }
   }
 
-  class ProBarista {
-    constructor(private machine: CommercialCoffeeMaker) {}
-    makeCoffee() {
-      const coffee = this.machine.makeCoffee(2);
-      console.log(coffee);
-      this.machine.fillCoffeeBeans(45);
-      this.machine.clean();
-    }
-  }
-
-  const RedCoffeeMachine: CoffeeMachine = CoffeeMachine.makeMachine(30);
-  const amateur = new AmateurUser(RedCoffeeMachine);
-  const pro = new ProBarista(RedCoffeeMachine);
-  amateur.makeCoffee();
-  pro.makeCoffee();
+  const machine = new CoffeeMachine(23);
+  const latteMachine = new LatteMachine(30, "serialNumber-123123123");
+  const coffee = latteMachine.makeCoffee(3);
+  console.log(coffee);
+  console.log(latteMachine.serialNumber);
 }
