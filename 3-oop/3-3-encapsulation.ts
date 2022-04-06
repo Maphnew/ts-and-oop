@@ -3,14 +3,23 @@
     shots: number;
   };
 
+  // public
+  // private
+  // protected
   class CoffeeMachine {
-    static BEANS_GRAMM_PER_SHOT = 7; // class level
-    coffeeBeans: number = 0; // instance (object) level
-    constructor(coffeeBeans: number) {
+    private static BEANS_GRAMM_PER_SHOT = 7; // class level
+    private coffeeBeans: number = 0; // instance (object) level
+    private constructor(coffeeBeans: number) {
       this.coffeeBeans = coffeeBeans;
     }
     static makeMachine(coffeeBeans: number): CoffeeMachine {
       return new CoffeeMachine(coffeeBeans);
+    }
+    fillCoffeeBeans(beans: number) {
+      if (beans < 0) {
+        throw new Error("Value for beans should be greater than 0");
+      }
+      this.coffeeBeans += beans;
     }
     makeCoffee(shots: number): ACupOfCoffee {
       if (this.coffeeBeans < shots * CoffeeMachine.BEANS_GRAMM_PER_SHOT) {
@@ -23,8 +32,6 @@
     }
   }
 
-  const RedCoffeeMachine = new CoffeeMachine(30);
-  RedCoffeeMachine.makeCoffee(3);
-  console.log(RedCoffeeMachine);
-  const NewCoffeeMachine = CoffeeMachine.makeMachine(19);
+  const RedCoffeeMachine = CoffeeMachine.makeMachine(30);
+  RedCoffeeMachine.fillCoffeeBeans(30);
 }
