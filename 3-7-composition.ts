@@ -1,6 +1,7 @@
 // 상속의 문제점
 // 1. 복잡성
 // 2. 하나의 클래스만 상속 가능
+// 3. 단방향
 
 {
   type ACupOfCoffee = {
@@ -58,33 +59,64 @@
     }
   }
 
-  class LatteMachine extends CoffeeMachine {
-    constructor(beans: number, public readonly serialNumber: string) {
-      super(beans);
-    }
+  // 싸구려 우유 거품기
+  class CheapMilkSteamer {
     private steamMilk(): void {
       console.log("Steaming some milk... 🥛");
     }
-    makeCoffee(shots: number): ACupOfCoffee {
-      const coffee = super.makeCoffee(shots);
+    makeMilk(cup: ACupOfCoffee): ACupOfCoffee {
       this.steamMilk();
       return {
-        ...coffee,
+        ...cup,
         hasMilk: true,
       };
     }
   }
 
-  class SweetCoffeeMaker extends CoffeeMachine {
-    constructor(beans: number) {
+  // 설탕 제조기
+  class AutomaticSugarMixer {
+    private getSugar() {
+      console.log("Getting some sugar from jar");
+      return true;
+    }
+
+    addSugar(cup: ACupOfCoffee): ACupOfCoffee {
+      const sugar = this.getSugar();
+      return {
+        ...cup,
+        hasSugar: true,
+      };
+    }
+  }
+  class LatteMachine extends CoffeeMachine {
+    constructor(beans: number, public readonly serialNumber: string, private milkFrother: CheapMilkSteamer) {
       super(beans);
     }
     makeCoffee(shots: number): ACupOfCoffee {
       const coffee = super.makeCoffee(shots);
-      return {
-        ...coffee,
-        hasSugar: true,
-      };
+      return this.milkFrother.makeMilk(coffee);
+    }
+  }
+
+  class SweetCoffeeMaker extends CoffeeMachine {
+    constructor(beans: number, private sugar: AutomaticSugarMixer) {
+      super(beans);
+    }
+
+    makeCoffee(shots: number): ACupOfCoffee {
+      const coffee = super.makeCoffee(shots);
+      return this.sugar.addSugar(coffee);
+    }
+  }
+
+  class SweetCaffeLatteMachine extends CoffeeMachine {
+    constructor(private beans: number, private milk: CheapMilkSteamer, private sugar: AutomaticSugarMixer) {
+      super(beans);
+    }
+    makeCoffee(shots: number): ACupOfCoffee {
+      const coffee = super.makeCoffee(shots);
+      const sugarAdded = this.sugar.addSugar(coffee);
+      return this.milk.makeMilk(sugarAdded);
     }
   }
 
