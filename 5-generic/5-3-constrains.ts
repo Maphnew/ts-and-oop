@@ -34,3 +34,20 @@ bob.workPartTime();
 const maphAfterPay = pay(maph);
 const bobAfterPay = pay(bob);
 maphAfterPay.workFullTime();
+
+const obj = {
+  name: "maph",
+  age: 20,
+};
+
+const obj2 = {
+  animal: "🐫",
+};
+
+function getValue<T, K extends keyof T>(object: T, key: K): T[K] {
+  return object[key];
+}
+
+console.log(getValue(obj, "name")); // maph
+console.log(getValue(obj, "age")); // 20
+console.log(getValue(obj2, "animal")); // 🐫
