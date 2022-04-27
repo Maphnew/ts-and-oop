@@ -30,3 +30,7 @@ tsc -w
 
 - exclude
 - include
+
+## sourceMap
+
+- debugging
