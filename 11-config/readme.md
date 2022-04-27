@@ -17,3 +17,16 @@ tsc --init
 ```
 tsc -w
 ```
+
+## outDir
+
+- Specify an output folder for all emitted files.
+
+## rootDir
+
+- Specify the root folder within your source files
+
+## Other options
+
+- exclude
+- include
