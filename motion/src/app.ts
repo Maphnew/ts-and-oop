@@ -1,23 +1,24 @@
+import { Component } from "./components/base.js";
 import { ImageComponent } from "./components/page/item/image.js";
 import { NoteComponent } from "./components/page/item/note.js";
 import { TodoComponent } from "./components/page/item/todo.js";
 import { VideoComponent } from "./components/page/item/video.js";
-import { PageComponent } from "./components/page/page.js";
+import { Composable, PageComponent, PageItemComponent } from "./components/page/page.js";
 
 class App {
-  private readonly page: PageComponent;
+  private readonly page: Component & Composable;
 
   constructor(appRoot: HTMLElement) {
-    this.page = new PageComponent();
-    const image = new ImageComponent("image title", "https://picsum.photos/600/300");
-    const note = new NoteComponent("note title", "note body");
-    const todo = new TodoComponent("todo title", "todo");
-    const video = new VideoComponent("video title", "https://www.youtube.com/embed/5qap5aO4i9A");
+    this.page = new PageComponent(PageItemComponent);
     this.page.attachTo(appRoot);
-    image.attachTo(appRoot, "beforeend");
-    note.attachTo(appRoot, "beforeend");
-    todo.attachTo(appRoot, "beforeend");
-    video.attachTo(appRoot, "beforeend");
+    const image = new ImageComponent("image title", "https://picsum.photos/600/300");
+    this.page.addChild(image);
+    const note = new NoteComponent("note title", "note body");
+    this.page.addChild(note);
+    const todo = new TodoComponent("todo title", "todo");
+    this.page.addChild(todo);
+    const video = new VideoComponent("video title", "https://www.youtube.com/embed/5qap5aO4i9A");
+    this.page.addChild(video);
   }
 }
 
