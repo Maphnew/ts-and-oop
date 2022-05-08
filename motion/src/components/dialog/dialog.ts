@@ -1,5 +1,5 @@
-import { BaseComponent, Component } from "./base.js";
-import { Composable } from "./page/page.js";
+import { BaseComponent, Component } from "../base.js";
+import { Composable } from "../page/page.js";
 
 type OnCloseListener = () => void;
 type OnSubmitListener = () => void;
